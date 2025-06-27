@@ -1,4 +1,5 @@
 # info.yaml  
+yaml_version: 0
 title: "ASIC Onboarding Project - Miranda"  
 author: "Miranda"  
 description: "SPI-controlled PWM peripheral for Tiny Tapeout."  

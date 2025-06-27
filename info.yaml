@@ -9,9 +9,9 @@ project:
   clock_hz: 0
   tiles: "1x1"
   source_files:  
-    - spi_peripheral.v
-    - pwm_peripheral.v  
-    - project.v
+    - "spi_peripheral.v"
+    - "pwm_peripheral.v"  
+    - "project.v"
 
 # NOT REQUIRED
 pinout:

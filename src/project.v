@@ -7,7 +7,7 @@ module tt_um_uwasic_onboarding_miranda (
   input  wire       ena,      // Always 1 when the design is powered
   input  wire       clk,      // Clock
   input  wire       rst_n     // Reset, active low
-)
+);
 
   // Add this inside the module block
   assign uio_oe = 8'hFF; // Set all IOs to output

@@ -1,5 +1,4 @@
 # info.yaml  
-yaml_version: 6
 project:
   title: "ASIC Onboarding Project - Miranda"  
   author: "Miranda"  
@@ -44,3 +43,4 @@ pinout:
   uio[5]: "OUT_D"
   uio[6]: "OUT_E"
   uio[7]: "OUT_F"
+yaml_version: 6

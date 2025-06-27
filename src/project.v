@@ -11,6 +11,9 @@ module tt_um_uwasic_onboarding_miranda (
 
   // Add this inside the module block
   assign uio_oe = 8'hFF; // Set all IOs to output
+  wire sclk = ui_in[0];
+  wire sdi = ui_in[1];
+  wire ncs = ui_in[2];
   
   // Create wires to refer to the values of the registers
   wire [7:0] en_reg_out_7_0;
@@ -34,9 +37,9 @@ module tt_um_uwasic_onboarding_miranda (
   spi_peripheral spi_peripheral_inst (
     .clk(clk),
     .rst_n(rst_n),
-    .sclk(ui_in[0]),
-    .ncs(ui_in[1]),
-    .sdi(ui_in[2]),
+    .sclk(sclk),
+    .ncs(ncs),
+    .sdi(sdi),
     .en_reg_out_7_0(en_reg_out_7_0),
     .en_reg_out_15_8(en_reg_out_15_8),
     .en_reg_pwm_7_0(en_reg_pwm_7_0),

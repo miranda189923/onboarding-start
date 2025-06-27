@@ -28,8 +28,7 @@ module tb ();
 `endif
 
   
-  tt_um_uwasic_onboarding_miranda user_project( .... )(
-
+tt_um_uwasic_onboarding_miranda user_project(
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
       .VPWR(VPWR),

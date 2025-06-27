@@ -19,7 +19,6 @@ module spi_peripheral (
     wire sclk_rise = sclk2 & ~sclk1;
     reg [15:0] shift_reg = 16'h0; // 16 bits SPI word (1 R/W + 7 Address + 8 Data)
     reg [4:0] bit_count = 5'd0;   // Count bits received
-    reg msg_complete = 1'b0;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -30,7 +29,6 @@ module spi_peripheral (
             sclk2 <= 1'b0;
             sdi1 <= 1'b0;  
             sdi2 <= 1'b0;
-            msg_complete <= 1'b0;
             shift_reg <= 16'h0;
             bit_count <= 5'd0;
             en_reg_out_7_0 <= 8'h00;
@@ -47,17 +45,14 @@ module spi_peripheral (
             sclk2 <= sclk1;
             sdi2 <= sdi1;
             
-            // Bit shifting and increment bit counter
+            // Bit shifting and increment bit counter if rising edge of sclk
             if (!ncs2) begin
                 if (sclk_rise && bit_count < 16) begin
                     shift_reg <= {shift_reg[14:0], sdi2};
                     bit_count <= bit_count + 1;
-                    if (bit_count == 15) begin
-                        msg_complete <= 1'b1;
-                    end
                 end
-            end else if (!ncs1 && ncs2) begin
-                if (msg_complete) begin
+            end else begin
+                if (bit_count == 15) begin
                     if (shift_reg[15]) begin
                         case (shift_reg[14:8])
                             7'h00: en_reg_out_7_0 <= shift_reg[7:0];
@@ -68,7 +63,6 @@ module spi_peripheral (
                             default: ; 
                         endcase
                     end
-                    msg_complete <= 1'b0;
                 end
                 // Reset
                 bit_count <= 5'd0; 

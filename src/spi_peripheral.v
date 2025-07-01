@@ -55,14 +55,20 @@ module spi_peripheral (
                     bit_count <= bit_count + 1;               // Increment bit counter
                 end
             end else begin
-                if (bit_count == 16 && shift_reg[15]) begin   // Write command
-                    temp_data <= shift_reg[7:0];              // Store data
-                    temp_addr <= shift_reg[14:8];             // Store address
-                    temp_valid <= 1'b1;                       // Set flag for update in next cycle
-                end
+                if (bit_count == 16) begin
+                    if (shift_reg[15]) begin                  // Write command
+                        temp_data <= shift_reg[7:0];
+                        temp_addr <= shift_reg[14:8];
+                        temp_valid <= 1'b1;
+                    end
                     bit_count <= 5'd0;
                     shift_reg <= 16'd0;
+                end else begin
+                    bit_count <= 5'd0; // Reset for partial transactions
+                    shift_reg <= 16'd0;
+                end
             end
+        end
 
             if (temp_valid) begin                             // Update output register based on stored address
                 case (temp_addr)

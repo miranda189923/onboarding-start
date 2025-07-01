@@ -1,9 +1,9 @@
 module spi_peripheral (
-    input wire nCS,
+    input wire ncs,
     input wire clk,
     input wire rst_n,
-    input wire SCLK,
-    input wire COPI,
+    input wire sclk,
+    input wire sdi,
     output reg [7:0] en_reg_out_7_0,
     output reg [7:0] en_reg_out_15_8,
     output reg [7:0] en_reg_pwm_7_0,
@@ -18,7 +18,7 @@ reg text_processed = 0;
 
 // Synchronized signals
 reg ncs_sync1, ncs_sync2;
-reg copi_sync1, copi_sync2;
+reg sdi_sync1, sdi_sync2;
 reg sclk_sync1, sclk_sync2;
 
 wire pos_sclk = sclk_sync2 & ~sclk_sync1;
@@ -28,8 +28,8 @@ always @(posedge clk or negedge rst_n) begin
         // Reset everything
         ncs_sync1 <= 1'b1;
         ncs_sync2 <= 1'b1;
-        copi_sync1 <= 1'b0;
-        copi_sync2 <= 1'b0;
+        sdi_sync1 <= 1'b0;
+        sdi_sync2 <= 1'b0;
         sclk_sync1 <= 0;
         sclk_sync2 <= 0;
 
@@ -46,11 +46,11 @@ always @(posedge clk or negedge rst_n) begin
 
     end else begin
         // Synchronize inputs
-        ncs_sync1 <= nCS;
+        ncs_sync1 <= ncs;
         ncs_sync2 <= ncs_sync1;
-        copi_sync1 <= COPI;
-        copi_sync2 <= copi_sync1;
-        sclk_sync1 <= SCLK;
+        sdi_sync1 <= sdi;
+        sdi_sync2 <= sdi_sync1;
+        sclk_sync1 <= sclk;
         sclk_sync2 <= sclk_sync1;
 
         // Default assignments to prevent inferred latches
@@ -60,7 +60,7 @@ always @(posedge clk or negedge rst_n) begin
         if (ncs_sync2 == 1'b0) begin
             // Receiving mode
             if (pos_sclk && bit_cnt != 16) begin
-                message <= {message[14:0], copi_sync2};
+                message <= {message[14:0], sdi_sync2};
                 bit_cnt <= bit_cnt + 1;
             end
         end else begin

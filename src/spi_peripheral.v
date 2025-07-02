@@ -10,7 +10,7 @@ module spi_peripheral (
     output reg  [7:0]   en_reg_out_15_8,  
     output reg  [7:0]   en_reg_pwm_7_0,  
     output reg  [7:0]   en_reg_pwm_15_8,  
-    output reg  [7:0]   pwm_duty_cycle,   
+    output reg  [7:0]   pwm_duty_cycle 
 );
 
     reg ncs1, ncs2; // Synchronization registers

@@ -56,7 +56,6 @@ module spi_peripheral (
                     shift_reg <= {shift_reg[14:0], sdi2};     // Shift in new bits during active transaction
                     bit_count <= bit_count + 1;               // Increment bit counter
                 end
-
             end else begin
                 if (bit_count == 16) begin
                     if (shift_reg[15]) begin                  // Write command

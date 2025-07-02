@@ -151,16 +151,12 @@ async def test_spi(dut):
     dut._log.info("SPI test completed successfully")
     
 async def reduce_cycles(dut, target_bit, timeout_cycles=5000):
-    timeout_time = timeout_cycles * 100  # Convert cycles to ns (100 ns per cycle)
-    if target_bit == 1:
-        trigger = RisingEdge(dut.uo_out[0])
-    else:
-        trigger = FallingEdge(dut.uo_out[0])
-    try:
-        await with_timeout(trigger, timeout_time, 'ns')
-        return cocotb.utils.get_sim_time(units="ns")
-    except TimeoutError:
-        raise TimeoutError(f"Timed out waiting for PWM to become {target_bit}")
+    for _ in range(timeout_cycles):
+        bit0 = int(dut.uo_out.value) & 1  # Extract bit 0 of uo_out
+        if bit0 == target_bit:
+            return cocotb.utils.get_sim_time(units="ns")
+        await ClockCycles(dut.clk, 1)
+    raise TimeoutError(f"Timed out waiting for PWM to become {target_bit}")
 
 @cocotb.test()
 async def test_pwm_freq(dut):
